@@ -15,4 +15,18 @@ declare namespace BM {
 		//其他若干不限制属性
 		[propName: string]: any
 	}
+	interface ItemShowTheme {
+		//宽度
+		width: number
+		//图标高度
+		iconHeight: number
+		//标签字大小
+		fontSize: number
+		//大小类型
+		sizeType: number
+		//显示类型
+		showType: number
+	}
 }
+
+

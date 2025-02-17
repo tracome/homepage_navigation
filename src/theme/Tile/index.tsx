@@ -1,18 +1,19 @@
-import FullData from '@/assets/json'
 import Items from '@/components/Items'
-import { useEffect, useState } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { bookMarkStore, itemShowThemeStore } from '@/store'
+import { useAtom } from 'jotai'
 import 'swiper/css'
 
 function Tile() {
-	const [currentData, setCurrentData] = useState<BM.Item[]>([])
-	useEffect(() => setCurrentData(FullData), [])
+	// const [currentData, setCurrentData] = useState<BM.Item[]>([])
+	const [currentData, setCurrentData] = useAtom(bookMarkStore)
+	// useEffect(() => setCurrentData(FullData), [])
+	const [showData] = useAtom(itemShowThemeStore)
 	return (
 		<main
-			className='grid-rows-auto beautyScroll grid flex-1 gap-20 overflow-y-auto p-20 pb-20'
+			className='grid-rows-auto beautyScroll grid flex-1 gap-20 overflow-y-auto p-20'
 			style={{
-				gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-				gridAutoRows: '160px'
+				gridTemplateColumns: 'repeat(auto-fill, minmax(' + showData.width + 'px, 1fr))',
+				gridAutoRows: showData.width + 'px'
 			}}
 		>
 			<Items data={currentData} callback={null} />

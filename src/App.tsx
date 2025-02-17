@@ -2,7 +2,8 @@ import Header from '@/components/Header'
 import UpdateNotification from '@/components/UpdateNotification'
 import { themeStore } from '@/store'
 import { useAtomValue } from 'jotai'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import MarkSearch from './components/MarkSearch'
 
 const DrillDown = lazy(() => import('./theme/DrillDown'))
 const Tile = lazy(() => import('./theme/Tile'))
@@ -21,10 +22,33 @@ function Page() {
 		}
 	}
 	const storeMutual = useAtomValue(themeStore)
+	const [showSearch, setShowSearch] = useState<Boolean>(false)
+	const onKeyDown = (event: any) => {
+		console.log(event)
+		if (event.ctrlKey && event.keyCode === 70) {
+			event.preventDefault()
+			setShowSearch(showSearch => !showSearch)
+		}
+		if (event.keyCode == 27) {
+			hideSearch()
+		}
+	}
+
+	const hideSearch = ()=>{
+		setShowSearch(false)
+	}
+	useEffect(() => {
+		window.addEventListener('keydown', onKeyDown) // 添加全局事件
+		return () => {
+			window.removeEventListener('keydown', onKeyDown) // 销毁
+		}
+	}, [])
+
 	return (
 		<Suspense fallback={<GlobalLoading />}>
 			<div className='flex h-screen flex-col bg-bgLight dark:bg-bgDark'>
 				<Header />
+				{showSearch ? <MarkSearch hideSearch={hideSearch}/> : null}
 				{currentMutual(storeMutual)}
 			</div>
 			<UpdateNotification />

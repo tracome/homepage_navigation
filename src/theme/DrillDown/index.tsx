@@ -2,17 +2,21 @@ import FullData from '@/assets/json'
 import Items from '@/components/Items'
 import { Breadcrumb } from '@douyinfe/semi-ui'
 import { Home, LeftOne } from '@icon-park/react'
-import { useEffect, useState } from 'react'
 //@ts-ignore
-import packageJson from '/package.json'
+import { bookMarkStore, breadDataStore, itemShowThemeStore } from '@/store'
+import { useAtom } from 'jotai'
+import packageJson from '../../../package.json'
 
 function DrillDown() {
 	//当前页面的书签
-	const [currentData, setCurrentData] = useState<BM.Item[]>([])
-	//面包屑数据
-	const [breadData, setBreadData] = useState<BM.Item[]>([])
+	// const [currentData, setCurrentData] = useState<BM.Item[]>([])
 
-	useEffect(() => setCurrentData(FullData), [])
+	const [currentData, setCurrentData] = useAtom(bookMarkStore)
+	//面包屑数据
+	const [breadData, setBreadData] = useAtom<BM.Item[]>(breadDataStore)
+
+	const [showData] = useAtom(itemShowThemeStore)
+	// useEffect(() => setCurrentData(FullData), [])
 	//新增面包屑
 	const addBreadData = (item: BM.Item) => {
 		if (item.children && item.children.length) {
@@ -57,10 +61,10 @@ function DrillDown() {
 				</div>
 			)}
 			<main
-				className='grid-rows-auto beautyScroll grid flex-1 gap-20 overflow-y-auto p-20 pb-20'
+				className='grid-rows-auto beautyScroll grid flex-1 gap-20 overflow-y-auto p-20'
 				style={{
-					gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-					gridAutoRows: '160px'
+					gridTemplateColumns: 'repeat(auto-fill, minmax(' + showData.width + 'px, 1fr))',
+					gridAutoRows: showData.width + 'px'
 				}}
 			>
 				<Items data={currentData} callback={addBreadData} />
