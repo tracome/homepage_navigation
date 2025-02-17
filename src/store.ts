@@ -33,13 +33,21 @@ export const sizeMap = new Map([
 	[
 		1,
 		{
+			width: 200,
+			iconHeight: 50,
+			fontSize: 20
+		}
+	],
+	[
+		2,
+		{
 			width: 160,
 			iconHeight: 40,
 			fontSize: 16
 		}
 	],
 	[
-		2,
+		3,
 		{
 			width: 120,
 			iconHeight: 30,
@@ -47,19 +55,11 @@ export const sizeMap = new Map([
 		}
 	],
 	[
-		3,
-		{
-			width: 100,
-			iconHeight: 25,
-			fontSize: 10
-		}
-	],
-	[
 		4,
 		{
-			width: 60,
-			iconHeight: 15,
-			fontSize: 6
+			width: 80,
+			iconHeight: 20,
+			fontSize: 8
 		}
 	]
 ])
