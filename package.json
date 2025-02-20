@@ -7,7 +7,7 @@
 	"updateLog": "更新了一些书签",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
+		"build": "vite build",
 		"prettier": "npx prettier --write ./src"
 	},
 	"dependencies": {
