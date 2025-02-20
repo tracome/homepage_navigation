@@ -12,15 +12,18 @@
 	},
 	"dependencies": {
 		"@douyinfe/semi-icons": "^2.74.0",
+		"@douyinfe/semi-illustrations": "^2.74.0",
 		"@douyinfe/semi-ui": "^2.46.0",
 		"@icon-park/react": "^1.4.2",
 		"@react-spring/web": "^9.7.3",
 		"antd": "^5.11.0",
+		"iojson": "^1.0.4",
 		"jotai": "^2.5.1",
-		"lodash.random": "^3.2.0",
+		"lodash": "^4.17.21",
 		"normalize.css": "^8.0.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-sortable-hoc": "^2.0.0",
 		"swiper": "^11.0.4"
 	},
 	"devDependencies": {

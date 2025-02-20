@@ -1,10 +1,10 @@
 import Header from '@/components/Header'
 import UpdateNotification from '@/components/UpdateNotification'
-import { themeStore } from '@/store'
-import { useAtomValue } from 'jotai'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { bookMarkStore, rightClickElement, showSearchFlag, themeStore } from '@/store'
+import { useAtom, useAtomValue } from 'jotai'
+import { lazy, Suspense, useEffect, useRef } from 'react'
+import BookMark from './components/BookMark'
 import MarkSearch from './components/MarkSearch'
-
 const DrillDown = lazy(() => import('./theme/DrillDown'))
 const Tile = lazy(() => import('./theme/Tile'))
 
@@ -22,9 +22,20 @@ function Page() {
 		}
 	}
 	const storeMutual = useAtomValue(themeStore)
-	const [showSearch, setShowSearch] = useState<Boolean>(false)
+	const currentData = useAtomValue(bookMarkStore)
+	const cbRef = useRef<BM.Item[]>(currentData)
+
+	useEffect(() => {
+		if (cbRef.current) {
+			//@ts-ignore
+			cbRef.current = currentData
+		}
+	}, [currentData])
+	const [rightClickEle, setRightClickEle] = useAtom(rightClickElement)
+	const [showSearch, setShowSearch] = useAtom(showSearchFlag)
+
 	const onKeyDown = (event: any) => {
-		console.log(event)
+		// console.log(event)
 		if (event.ctrlKey && event.keyCode === 70) {
 			event.preventDefault()
 			setShowSearch(showSearch => !showSearch)
@@ -34,24 +45,51 @@ function Page() {
 		}
 	}
 
-	const hideSearch = ()=>{
+	const hideSearch = () => {
 		setShowSearch(false)
+	}
+	const onContextmenu = (e: any) => {
+		// console.log(e)
+
+		// 查找最近的包含 .ancestor-class 类的祖先元素
+		const ancestor = e.target.closest('.bookMarkItem')
+		if (ancestor) {
+			const eleId = ancestor.className.split(' ').find((i: string | string[]) => {
+				return i.includes('book_item_')
+			})
+			// console.log(eleId)
+			// console.log(
+			// 	cbRef.current.length,
+			// 	cbRef.current.find(i => {
+			// 		console.log(i.id)
+			// 		return i.id == eleId
+			// 	})
+			// )
+			setRightClickEle(cbRef.current.find(i => i.id == eleId))
+		} else {
+			// console.log({ type: 3 })
+			setRightClickEle({ type: 3 })
+		}
 	}
 	useEffect(() => {
 		window.addEventListener('keydown', onKeyDown) // 添加全局事件
+		window.addEventListener('contextmenu', onContextmenu) // 添加全局事件
 		return () => {
 			window.removeEventListener('keydown', onKeyDown) // 销毁
+			window.addEventListener('contextmenu', onContextmenu) // 添加全局事件
 		}
 	}, [])
-
+	
 	return (
 		<Suspense fallback={<GlobalLoading />}>
-			<div className='flex h-screen flex-col bg-bgLight dark:bg-bgDark'>
+			<BookMark />
+			<div className='flex h-screen flex-col overflow-hidden bg-bgLight dark:bg-bgDark'>
 				<Header />
-				{showSearch ? <MarkSearch hideSearch={hideSearch}/> : null}
+				{showSearch ? <MarkSearch hideSearch={hideSearch} /> : null}
 				{currentMutual(storeMutual)}
+				
 			</div>
-			<UpdateNotification />
+			{/* <UpdateNotification /> */}
 		</Suspense>
 	)
 }

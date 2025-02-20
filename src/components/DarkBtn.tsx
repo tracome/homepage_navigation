@@ -27,7 +27,7 @@ function DarkBtn() {
 		isDark ? document.body.setAttribute('theme-mode', 'dark') : document.body.removeAttribute('theme-mode')
 	}, [])
 
-	return <Button icon={darkState ? <Moon theme='outline' /> : <Brightness theme='outline' />} type='tertiary' size='large' onClick={toggleDark} />
+	return <Button icon={darkState ? <Brightness theme='outline' /> : <Moon theme='outline' />} type='tertiary' size='large' onClick={toggleDark} />
 }
 
 export default DarkBtn

@@ -1,6 +1,8 @@
 import FullData from '@/assets/json'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
+//@ts-ignore
+import { uniqueId } from 'lodash'
 const cacheTheme = localStorage.getItem('bm_theme')
 export const darkStore = atomWithStorage('bm_dark', localStorage.getItem('bm_dark') ?? 0)
 export const themeStore = atomWithStorage('bm_theme', cacheTheme ? JSON.parse(cacheTheme) : 'drillDown')
@@ -9,7 +11,21 @@ export const themeOptions = atom<{ label: string; value: string }[]>([
 	{ label: '平铺交互', value: 'tile' }
 ])
 
-export const bookMarkStore = atom<BM.Item[]>(FullData)
+const traverse = (nodes: any[]) => {
+	return nodes.map((node: any) => {
+		const newNode = { ...node, id: 'book_item_' + uniqueId() + '_' + new Date().getTime() } // 分配ID并复制节点
+		if (newNode.children?.length) {
+			// 检查子节点
+			newNode.children = traverse(newNode.children) // 递归处理子节点
+		}
+		return newNode
+	})
+}
+
+const bookMarkData: BM.Item[] = traverse(FullData)
+// console.log(bookMarkData)
+
+export const bookMarkStore = atom<BM.Item[]>(bookMarkData)
 
 export const sizeOption = atom([
 	{
@@ -82,4 +98,9 @@ export const showOption = atom([
 	{ label: '圆形', value: 2 }
 ])
 
-export const breadDataStore = atom<BM.Item[]>([])
+export const breadDataStore = atom([bookMarkData])
+
+export const showSearchFlag = atom<boolean>(false)
+
+export const rightClickElement = atom<BM.Item | any>({})
+

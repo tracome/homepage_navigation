@@ -1,5 +1,7 @@
 declare namespace BM {
 	interface Item {
+		//唯一id
+		id?: string
 		//类型，1->链接 2->文件夹
 		type: 1 | 2
 		//名称（链接标题或者文件夹名）
@@ -28,5 +30,3 @@ declare namespace BM {
 		showType: number
 	}
 }
-
-
